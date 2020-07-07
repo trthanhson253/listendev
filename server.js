@@ -1,10 +1,18 @@
+const cors = require('cors');
 const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const cors = require('cors');
+
 const mongoose = require('mongoose');
 require('dotenv').config();
+
+// cors
+if (process.env.NODE_ENV === 'development') {
+  app.use(cors({ origin: `${process.env.CLIENT_URL}` }));
+  app.options('*', cors());
+}
+
 // bring routes
 const companyRoutes = require('./routes/companyRoutes');
 const commentRoutes = require('./routes/commentRoutes');
@@ -30,11 +38,7 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-// cors
-if (process.env.NODE_ENV === 'development') {
-  app.use(cors({ origin: `${process.env.CLIENT_URL}` }));
-  // app.use(cors());
-}
+
 
 // app.use(function (req, res, next) {
 //   if (req.secure) {
